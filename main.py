@@ -24,5 +24,9 @@ response = client.chat.completions.create(
         }
     ],
 )
-
+if response.usage != None:
+    print(f"Prompt tokens: {response.usage.prompt_tokens}")
+    print(f"Response tokens: {response.usage.completion_tokens}")
+else:
+    raise RuntimeError("There is no token usage")
 print(response.choices[0].message.content)
