@@ -17,23 +17,29 @@ def main():
     )
 
     parser = argparse.ArgumentParser(description="AI Agent")
-    parser.add_argument("user_prompt", type=str, help="User prompt")
+    parser.add_argument("user_prompt", type=str, help="User prompt",)
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
     messages = [{"role": "user", "content": args.user_prompt},]
-    generate_response(client, messages)
+    if args.verbose:
+            print(f"User prompt: {args.user_prompt}\n")
 
-def generate_response(client, messages):
+    generate_response(client, messages, args.verbose)
+
+
+def generate_response(client, messages, verbose: bool):
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
     )
-    if response.usage != None:
+    if not response.usage:
+        raise RuntimeError("There is no token usage")
+
+    if verbose:
         print(f"Prompt tokens: {response.usage.prompt_tokens}")
         print(f"Response tokens: {response.usage.completion_tokens}")
-        print("Response:")
-    else:
-        raise RuntimeError("There is no token usage")
+    print("Response:")
     print(response.choices[0].message.content)
 
 if __name__ == "__main__":
