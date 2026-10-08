@@ -24,7 +24,6 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
                     file_information.append(f"- {file}: file_size={os.path.getsize(join_path)} bytes, is_dir={os.path.isdir(join_path)}")
                 joined_strings = "\n".join(file_information)
 
-                #return f'Success: "{directory}" is within the working directory'
                 return joined_strings
             except Exception as e:
                 return f"Error: {e}"
