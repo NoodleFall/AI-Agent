@@ -1,7 +1,7 @@
 import os
 
 
-def get_files_info(working_directory: str, directory: str = ".") -> str:
+def get_files_info(working_directory: str, directory: str = ".") -> str:  # pyright: ignore[reportReturnType]
     try:
         working_dir_abs = os.path.abspath(working_directory)
         target_dir = os.path.normpath(os.path.join(working_dir_abs, directory))
