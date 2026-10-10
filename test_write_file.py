@@ -1,5 +1,6 @@
 from functions.write_files import write_file
 
+
 def test():
     result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
     print(result)

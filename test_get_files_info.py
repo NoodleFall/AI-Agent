@@ -1,5 +1,6 @@
 from functions.get_files_info import get_files_info
 
+
 def test():
     print(f"Result for current directory:\n{get_files_info("calculator", ".")}")
     print(f"Result for 'pkg' directory:\n{get_files_info("calculator", "pkg")}")
