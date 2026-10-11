@@ -1,8 +1,11 @@
+import argparse
 import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
-import argparse
+
+from prompts import system_prompt
+
 
 def main():
     load_dotenv()
@@ -21,7 +24,10 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
-    messages = [{"role": "user", "content": args.user_prompt},]
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": args.user_prompt},
+    ]
     if args.verbose:
             print(f"User prompt: {args.user_prompt}\n")
 
@@ -32,6 +38,7 @@ def generate_response(client, messages, verbose: bool):
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
+        temperature=0,
     )
     if not response.usage:
         raise RuntimeError("There is no token usage")
