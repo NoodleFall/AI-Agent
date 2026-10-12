@@ -34,7 +34,12 @@ def main():
     if args.verbose:
             print(f"User prompt: {args.user_prompt}\n")
 
-    generate_response(client, messages, args.verbose)
+    for n in range(20):
+        message = generate_response(client, messages, args.verbose)
+        if not message.tool_calls:
+            return message
+    raise Exception("Maximum iteration limit reached; the agent is terminating; no final answer was found.")
+
 
 
 def generate_response(client, messages, verbose: bool):
@@ -52,10 +57,11 @@ def generate_response(client, messages, verbose: bool):
         print(f"Response tokens: {response.usage.completion_tokens}")
 
     message = response.choices[0].message
+    messages.append(message)
     if not message.tool_calls:
         print("Response:")
         print(message.content)
-        return
+        return message
 
     for tool_call in message.tool_calls:
         if tool_call.type != "function":
@@ -65,6 +71,8 @@ def generate_response(client, messages, verbose: bool):
             raise Exception("Content is empty")
         if verbose:
             print(f"-> {result_message['content']}")
+        messages.append(result_message)
+    return message
 
 if __name__ == "__main__":
     main()
